@@ -1,5 +1,5 @@
 package modelo;
 
 public class Livro {
- private nome;
+ private String nome;
 }
