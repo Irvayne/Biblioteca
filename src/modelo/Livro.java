@@ -11,6 +11,15 @@ public class Livro {
 	private String editora;
 	private List<String> assuntos;
 	
+	public Livro(String titulo, String autor, int ano, String codigo, String editora) {
+		super();
+		this.titulo = titulo;
+		this.autor = autor;
+		this.ano = ano;
+		this.codigo = codigo;
+		this.editora = editora;
+	}
+	
 	public Livro(long id, String titulo, String autor, int ano, String codigo, String editora) {
 		super();
 		this.id = id;

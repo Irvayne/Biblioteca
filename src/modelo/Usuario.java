@@ -5,7 +5,25 @@ public class Usuario {
 	private String nome;
 	private String cpf;
 	private String endereço;
+	private String telefone;
 	
+	public Usuario(long id, String nome, String cpf, String endereço, String telefone) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cpf = cpf;
+		this.endereço = endereço;
+		this.telefone = telefone;
+	}
+
+	public Usuario(String nome, String cpf, String endereço, String telefone) {
+		super();
+		this.nome = nome;
+		this.cpf = cpf;
+		this.endereço = endereço;
+		this.telefone = telefone;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -36,5 +54,13 @@ public class Usuario {
 	
 	public void setEndereço(String endereço) {
 		this.endereço = endereço;
+	}
+
+	public String getTelefone() {
+		return telefone;
+	}
+
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
 	}
 }
