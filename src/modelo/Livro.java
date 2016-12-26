@@ -9,15 +9,35 @@ public class Livro {
 	private int ano;
 	private String codigo;
 	private String editora;
+	private String edicao;
+	private String descricao;
 	private List<String> assuntos;
 	
-	public Livro(String titulo, String autor, int ano, String codigo, String editora) {
+	
+	public Livro(long id, String titulo, String autor, int ano, String codigo, String editora, String edicao,
+			String descricao, List<String> assuntos) {
+		super();
+		this.id = id;
+		this.titulo = titulo;
+		this.autor = autor;
+		this.ano = ano;
+		this.codigo = codigo;
+		this.editora = editora;
+		this.edicao = edicao;
+		this.descricao = descricao;
+		this.assuntos = assuntos;
+	}
+
+	public Livro(String titulo, String autor, int ano, String codigo, String editora,String edicao,
+			String descricao) {
 		super();
 		this.titulo = titulo;
 		this.autor = autor;
 		this.ano = ano;
 		this.codigo = codigo;
 		this.editora = editora;
+		this.edicao = edicao;
+		this.descricao = descricao;
 	}
 	
 	public Livro(long id, String titulo, String autor, int ano, String codigo, String editora) {
@@ -85,4 +105,20 @@ public class Livro {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+	public String getEdicao() {
+		return edicao;
+	}
+
+	public void setEdicao(String edicao) {
+		this.edicao = edicao;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
 }

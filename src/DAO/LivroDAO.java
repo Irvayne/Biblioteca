@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 import excecoes.ObjetoExistente;
@@ -11,27 +12,50 @@ import excecoes.ObjetoInexistente;
 import modelo.Livro;
 
 public class LivroDAO {
+	
+	public static void createTable() throws SQLException {
+		  String criarTabela = "CREATE TABLE IF NOT EXISTS livros (" + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+		    + "titulo VARCHAR(50) NOT NULL," + "autor VARCHAR(50) NOT NULL,"
+		    + "ano int(4)," + "codigo VARCHAR(20)," + "editora VARCHAR(20),"
+		    + "edicao VARCHAR(20)," + "descricao VARCHAR(256))" + "ENGINE=MyISAM";
+		  PreparedStatement statement = (PreparedStatement) Conexao.getConnection().prepareStatement(criarTabela);
+		  statement.execute();
+		  statement.close();
+		 }
+	
 	public static boolean inserirLivro(String titulo, String autor, String editora, int ano, String codigo) throws ObjetoExistente{
-		if(pesquisarLivro(codigo) == null){
-			Statement st;
-			try{
-				st = (Statement) Conexao.getConnection().createStatement();
-				String cmd = "insert into livros (titulo, autor, editora, ano, codigo) values("
-						+ "'" + titulo + "', '" + autor + "', '" + editora + "', " + ano + ", '" + codigo + "')";
-				System.out.println("SQL INSERT LIVRO: " + cmd);
-				st.executeUpdate(cmd);
-				st.close();
-				return true;
-			}catch(Exception e){
-				System.out.println("ERROR - INSERT LIVRO\n" + e.getMessage());
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		try {
+			if(pesquisarLivro(codigo) == null){
+				Statement st;
+				try{
+					st = (Statement) Conexao.getConnection().createStatement();
+					String cmd = "insert into livros (titulo, autor, editora, ano, codigo) values("
+							+ "'" + titulo + "', '" + autor + "', '" + editora + "', " + ano + ", '" + codigo + "')";
+					System.out.println("SQL INSERT LIVRO: " + cmd);
+					st.executeUpdate(cmd);
+					st.close();
+					return true;
+				}catch(Exception e){
+					System.out.println("ERROR - INSERT LIVRO\n" + e.getMessage());
+				}
+			}else{
+				throw new ObjetoExistente("LIVRO COM MESMO CÃ“DIGO JÃ� CADASTRADO\n");
 			}
-		}else{
-			throw new ObjetoExistente("LIVRO COM MESMO CÓDIGO JÁ CADASTRADO\n");
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	public static boolean emprestarLivro(String codigo, String cpf){
+	public static boolean emprestarLivro(String codigo, String cpf) throws SQLException{
+		createTable();
 		if(pesquisarLivro(codigo) != null){
 			if(UsuarioDAO.pesquisarUsuario(cpf) != null){
 				if(pesquisarLivroEmprestado(codigo) == null){
@@ -48,18 +72,19 @@ public class LivroDAO {
 						System.out.println("ERROR - EMPRESTAR LIVRO\n");
 					}
 				}else{
-					System.out.println("LIVRO JÁ EMPRESTADO A OUTRO USUARIO");
+					System.out.println("LIVRO JÃ� EMPRESTADO A OUTRO USUARIO");
 				}
 			}else{
-				System.out.println("CPF DE USUÁRIO NÃO ENCONTRADO");
+				System.out.println("CPF DE USUÃ�RIO NÃƒO ENCONTRADO");
 			}
 		}else{
-			System.out.println("CÓDIGO DE LIVRO NÃO ENCONTRADO");
+			System.out.println("CÃ“DIGO DE LIVRO NÃƒO ENCONTRADO");
 		}
 		return false;
 	}
 	
-	public static boolean deletarLivro(String codigo) throws ObjetoInexistente{
+	public static boolean deletarLivro(String codigo) throws ObjetoInexistente, SQLException{
+		createTable();
 		if(pesquisarLivro(codigo) != null){
 			Statement st;
 			try{
@@ -73,12 +98,13 @@ public class LivroDAO {
 				System.err.println("ERROR - DELETE LIVRO\n");
 			}
 		}else{
-			throw new ObjetoInexistente("CÓDIGO NÃO ENCONTRADO NO BANCO DE DADOS!");
+			throw new ObjetoInexistente("CÃ“DIGO NÃƒO ENCONTRADO NO BANCO DE DADOS!");
 		}
 		return false;
 	}
 	
-	public static ArrayList<Livro> listarLivros(){
+	public static ArrayList<Livro> listarLivros() throws SQLException{
+		createTable();
 		ArrayList<Livro> livros = new ArrayList<Livro>();
 		Livro l = null;
 		Statement st;
@@ -87,7 +113,7 @@ public class LivroDAO {
 			String cmd = "select * from livros";
 			ResultSet rs = st.executeQuery(cmd);
 			while(rs.next()){
-				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"));
+				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"),rs.getString("edicao"),rs.getString("descricao"));
 				livros.add(l);
 			}
 		}catch(Exception e){
@@ -96,7 +122,8 @@ public class LivroDAO {
 		return livros;
 	}
 	
-	public static Livro pesquisarLivro(String codigo){
+	public static Livro pesquisarLivro(String codigo) throws SQLException{
+		createTable();
 		Statement st;
 		Livro l = null;
 		try{
@@ -112,7 +139,8 @@ public class LivroDAO {
 		return l;
 	}
 	
-	public static Livro pesquisarLivroEmprestado(String codigo){
+	public static Livro pesquisarLivroEmprestado(String codigo) throws SQLException{
+		createTable();
 		Livro l = null;
 		Statement st;
 		try{
@@ -120,7 +148,7 @@ public class LivroDAO {
 			String cmd = "select * from emprestimo where codigo = '" + codigo + "'";
 			ResultSet rs = st.executeQuery(cmd);
 			if(rs.next())
-				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"));
+				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"),rs.getString("edicao"),rs.getString("descricao"));
 		}catch(Exception e ){
 			System.out.println("ERROR - PESQUISAR LIVRO EMPRESTADO");
 		}

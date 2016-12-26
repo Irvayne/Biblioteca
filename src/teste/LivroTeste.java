@@ -1,5 +1,6 @@
 package teste;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import DAO.LivroDAO;
@@ -11,18 +12,20 @@ import modelo.Usuario;
 public class LivroTeste {
 
 	public static void main(String[] args) {
-		ArrayList<Livro> livros = LivroDAO.listarLivros();
-		ArrayList<Usuario> usuarios = UsuarioDAO.listaUsuarios();
-		for(Livro l : livros)
-			System.out.println(l.getCodigo());
-		
-		for(Usuario u : usuarios)
-			System.out.println(u.getCpf());
-		
-		LivroDAO.emprestarLivro("1923-C", "06322914359");
+	
+			try {
+				LivroDAO.createTable();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//LivroDAO.inserirLivro("asd", "eu", "cu", (int) 2002,"asd123");
+	
 	}
 	
-	public static void inserirLivros(Livro livro) throws ObjetoExistente{
+	public static void inserirLivros(Livro livro) throws ObjetoExistente, SQLException{
 		LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), (int) livro.getAno(), livro.getCodigo());
 	}
+	
 }

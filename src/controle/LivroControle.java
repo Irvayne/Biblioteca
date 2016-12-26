@@ -1,5 +1,4 @@
 package controle;
-
 import DAO.LivroDAO;
 import excecoes.ObjetoExistente;
 import excecoes.ObjetoInexistente;
@@ -11,6 +10,7 @@ public class LivroControle {
 	 * insere o livro que foi passado por parametro
 	 * @param livro
 	 */
+
 	public static void inserirLivro(Livro livro){
 		try {
 			LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), livro.getAno(), livro.getCodigo());
