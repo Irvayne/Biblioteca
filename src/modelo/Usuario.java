@@ -4,23 +4,23 @@ public class Usuario {
 	private long id;
 	private String nome;
 	private String cpf;
-	private String endereço;
+	private String endereco;
 	private String telefone;
 	
-	public Usuario(long id, String nome, String cpf, String endereço, String telefone) {
+	public Usuario(long id, String nome, String cpf, String endereco, String telefone) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.cpf = cpf;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.telefone = telefone;
 	}
 
-	public Usuario(String nome, String cpf, String endereço, String telefone) {
+	public Usuario(String nome, String cpf, String endereco, String telefone) {
 		super();
 		this.nome = nome;
 		this.cpf = cpf;
-		this.endereço = endereço;
+		this.endereco = endereco;
 		this.telefone = telefone;
 	}
 
@@ -48,12 +48,12 @@ public class Usuario {
 		this.cpf = cpf;
 	}
 	
-	public String getEndereço() {
-		return endereço;
+	public String getEndereco() {
+		return endereco;
 	}
 	
-	public void setEndereço(String endereço) {
-		this.endereço = endereço;
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
 	}
 
 	public String getTelefone() {
