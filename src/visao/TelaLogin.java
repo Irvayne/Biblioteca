@@ -7,6 +7,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
@@ -26,37 +27,43 @@ public class TelaLogin extends JFrame {
 	 */
 	public TelaLogin() {
 		
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-			SwingUtilities.updateComponentTreeUI(this);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		 for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            try {
+						UIManager.setLookAndFeel(info.getClassName());
+						SwingUtilities.updateComponentTreeUI(this);
+					} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+							| UnsupportedLookAndFeelException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		            break;
+		        }
+		    }
+		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 198, 299);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		txtLogin = new JTextField();
-		txtLogin.setBounds(156, 88, 86, 20);
+		txtLogin.setBounds(60, 88, 86, 20);
 		contentPane.add(txtLogin);
 		txtLogin.setColumns(10);
 		
 		JLabel lblLogin = new JLabel("Login:");
-		lblLogin.setBounds(100, 91, 56, 14);
+		lblLogin.setBounds(24, 91, 56, 14);
 		contentPane.add(lblLogin);
 		
 		JLabel lblSenha = new JLabel("Senha:");
-		lblSenha.setBounds(100, 122, 56, 14);
+		lblSenha.setBounds(24, 122, 56, 14);
 		contentPane.add(lblSenha);
 		
 		txtSenha = new JPasswordField();
-		txtSenha.setBounds(156, 119, 86, 20);
+		txtSenha.setBounds(60, 119, 86, 20);
 		contentPane.add(txtSenha);
 		
 		JButton btnEntrar = new JButton("Entrar");
@@ -72,7 +79,7 @@ public class TelaLogin extends JFrame {
 				//}
 			}
 		});
-		btnEntrar.setBounds(126, 147, 89, 23);
+		btnEntrar.setBounds(47, 157, 86, 23);
 		contentPane.add(btnEntrar);
 		
 		lblStatus = new JLabel("");
