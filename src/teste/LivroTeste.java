@@ -1,31 +1,23 @@
 package teste;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
+import excecoes.ObjetoInexistente;
 import DAO.LivroDAO;
-import DAO.UsuarioDAO;
-import excecoes.ObjetoExistente;
-import modelo.Livro;
-import modelo.Usuario;
 
 public class LivroTeste {
 
 	public static void main(String[] args) {
-	
+		try {
 			try {
-				LivroDAO.createTable();
-			} catch (SQLException e) {
+				LivroDAO.deletarLivro("000");
+			} catch (ObjetoInexistente e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			//LivroDAO.inserirLivro("asd", "eu", "cu", (int) 2002,"asd123");
-	
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public static void inserirLivros(Livro livro) throws ObjetoExistente, SQLException{
-		LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), (int) livro.getAno(), livro.getCodigo());
-	}
-	
 }

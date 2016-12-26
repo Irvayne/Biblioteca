@@ -1,4 +1,6 @@
 package controle;
+import java.sql.SQLException;
+
 import DAO.LivroDAO;
 import excecoes.ObjetoExistente;
 import excecoes.ObjetoInexistente;
@@ -13,7 +15,7 @@ public class LivroControle {
 
 	public static void inserirLivro(Livro livro){
 		try {
-			LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), livro.getAno(), livro.getCodigo());
+			LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), livro.getAno(), livro.getCodigo(), livro.getEdicao(), livro.getDescricao());
 			System.out.println("Livro cadastrado com sucesso!");
 		} catch (ObjetoExistente e) {
 			System.err.println(e.getMessage());
@@ -23,8 +25,9 @@ public class LivroControle {
 	/**
 	 * deleta um livro de acordo com o codigo unico passado por parametro
 	 * @param codigo
+	 * @throws SQLException 
 	 */
-	public static void deletarLivro(String codigo){
+	public static void deletarLivro(String codigo) throws SQLException{
 		try{
 			LivroDAO.deletarLivro(codigo);
 			System.out.println("Livro deletado com sucesso!");

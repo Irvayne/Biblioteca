@@ -14,16 +14,21 @@ import modelo.Livro;
 public class LivroDAO {
 	
 	public static void createTable() throws SQLException {
-		  String criarTabela = "CREATE TABLE IF NOT EXISTS livros (" + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
-		    + "titulo VARCHAR(50) NOT NULL," + "autor VARCHAR(50) NOT NULL,"
-		    + "ano int(4)," + "codigo VARCHAR(20)," + "editora VARCHAR(20),"
-		    + "edicao VARCHAR(20)," + "descricao VARCHAR(256))" + "ENGINE=MyISAM";
-		  PreparedStatement statement = (PreparedStatement) Conexao.getConnection().prepareStatement(criarTabela);
-		  statement.execute();
-		  statement.close();
-		 }
+		String criarTabela = "CREATE TABLE IF NOT EXISTS livros (" + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+				+ "titulo VARCHAR(50) NOT NULL," + "autor VARCHAR(50) NOT NULL,"
+				+ "ano int(4)," + "codigo VARCHAR(20)," + "editora VARCHAR(20),"
+				+ "edicao VARCHAR(20)," + "descricao VARCHAR(256))" + "ENGINE=MyISAM";
+		PreparedStatement statement = (PreparedStatement) Conexao.getConnection().prepareStatement(criarTabela);
+		statement.execute();
+		
+		criarTabela = "CREATE TABLE IF NOT EXISTS emprestimo (" + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+				+ "codigo VARCHAR(50) NOT NULL," + "cpf VARCHAR(50) NOT NULL)" + "ENGINE=MyISAM";
+		statement = (PreparedStatement) Conexao.getConnection().prepareStatement(criarTabela);
+		statement.execute();
+		statement.close();
+	}
 	
-	public static boolean inserirLivro(String titulo, String autor, String editora, int ano, String codigo) throws ObjetoExistente{
+	public static boolean inserirLivro(String titulo, String autor, String editora, int ano, String codigo, String edicao, String descricao) throws ObjetoExistente{
 		try {
 			createTable();
 		} catch (SQLException e1) {
@@ -35,8 +40,8 @@ public class LivroDAO {
 				Statement st;
 				try{
 					st = (Statement) Conexao.getConnection().createStatement();
-					String cmd = "insert into livros (titulo, autor, editora, ano, codigo) values("
-							+ "'" + titulo + "', '" + autor + "', '" + editora + "', " + ano + ", '" + codigo + "')";
+					String cmd = "insert into livros (titulo, autor, editora, ano, codigo, edicao, descricao) values("
+							+ "'" + titulo + "', '" + autor + "', '" + editora + "', " + ano + ", '" + codigo + "', '" + edicao + "', '" + descricao + "')";
 					System.out.println("SQL INSERT LIVRO: " + cmd);
 					st.executeUpdate(cmd);
 					st.close();
@@ -81,6 +86,58 @@ public class LivroDAO {
 			System.out.println("CÃ“DIGO DE LIVRO NÃƒO ENCONTRADO");
 		}
 		return false;
+	}
+	
+	public static boolean devolverLivro(String codigo){
+		try {
+			createTable();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if(pesquisarLivro(codigo) != null){
+				if(pesquisarLivroEmprestado(codigo) != null){
+					Statement st;
+					try {
+						st = (Statement) Conexao.getConnection().createStatement();
+						String cmd = "delete from emprestimo where codigo = '" + codigo + "'";
+						System.out.println("SQL EMPRESTAR LIVRO\n" + cmd);
+						st.executeUpdate(cmd);
+						st.close();
+						return true;
+					}catch(Exception e){
+						
+					}
+				}else{
+					System.out.println("Livro não se encontra emprestado no momento");
+				}
+			}else{
+				System.out.println("Código de livro não encontrado!");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;		
+	}
+	
+	public static ArrayList<Livro> listarLivrosEmprestados() throws SQLException{
+		createTable();
+		ArrayList<Livro> livros = new ArrayList<Livro>();
+		Statement st;
+		try{
+			st = (Statement) Conexao.getConnection().createStatement();
+			String cmd = "select * from emprestimo";
+			ResultSet rs = st.executeQuery(cmd);
+			while(rs.next()){
+				System.out.println(rs.getString("codigo"));
+			}
+		}catch(Exception e){
+			
+		}
+		return livros;
 	}
 	
 	public static boolean deletarLivro(String codigo) throws ObjetoInexistente, SQLException{

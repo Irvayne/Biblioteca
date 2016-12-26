@@ -1,8 +1,10 @@
 package DAO;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 import excecoes.ObjetoExistente;
@@ -10,7 +12,22 @@ import modelo.Usuario;
 
 public class UsuarioDAO {
 	
+	public static void createTable() throws SQLException {
+		String criarTabela = "CREATE TABLE IF NOT EXISTS usuario (" + "id BIGINT AUTO_INCREMENT PRIMARY KEY,"
+				+ "nome VARCHAR(50) NOT NULL," + "cpf VARCHAR(50) NOT NULL,"
+				+ "endereco varchar(80)," + "telefone VARCHAR(20))" + "ENGINE=MyISAM";
+		PreparedStatement statement = (PreparedStatement) Conexao.getConnection().prepareStatement(criarTabela);
+		statement.execute();
+		statement.close();
+	}
+	
 	public static boolean inserirUsuario(String nome, String cpf, String endereco, String telefone) throws ObjetoExistente{
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if(pesquisarUsuario(cpf) == null){
 			Statement st;
 			try{
@@ -25,12 +42,18 @@ public class UsuarioDAO {
 				System.err.println("ERRO INSERT USUARIO");
 			}
 		}else{
-			throw new ObjetoExistente("USUARIO COM MESMO CPF JÁ CADASTRADO!");
+			throw new ObjetoExistente("USUARIO COM MESMO CPF JÃ� CADASTRADO!");
 		}
 		return false;
 	}
 	
 	public static boolean deletarUsuario(String cpf){
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		if(pesquisarUsuario(cpf) != null){
 			Statement st;
 			try{
@@ -47,6 +70,12 @@ public class UsuarioDAO {
 	}
 	
 	public static ArrayList<Usuario> listaUsuarios(){
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 		Usuario u = null;
 		Statement st;
@@ -65,6 +94,12 @@ public class UsuarioDAO {
 	}
 	
 	public static Usuario pesquisarUsuario(String cpf){
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		Usuario u = null;
 		Statement st;
 		try{

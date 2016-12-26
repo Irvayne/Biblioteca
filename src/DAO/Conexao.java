@@ -29,7 +29,7 @@ public class Conexao {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conexao = DriverManager.getConnection("jdbc:mysql://localhost/biblioteca",
-					"root", "");
+					"root", "rooot");
 	    } catch (Exception e){
 	    	  System.out.println(e.getMessage());
 	    }
