@@ -73,9 +73,7 @@ public class LivroControle {
 	public static boolean emprestarLivro(String codigo, String cpf) {
 
 		try {
-			LivroDAO.emprestarLivro(codigo, cpf);
-			System.out.println("Livro emprestado com sucesso!");
-			return true;
+			return LivroDAO.emprestarLivro(codigo, cpf);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.err.println(e.getMessage());
@@ -84,15 +82,9 @@ public class LivroControle {
 	}
 
 	public static boolean devolverLivro(String codigo) {
-		
-		if (LivroDAO.devolverLivro(codigo)) {
-
-			System.out.println("Livro devolvido com sucesso!");
+		if (LivroDAO.devolverLivro(codigo)) 
 			return true;
-		}
-
 		return false;
-
 	}
 
 	public static ArrayList<Livro> listarLivrosEmprestados() {

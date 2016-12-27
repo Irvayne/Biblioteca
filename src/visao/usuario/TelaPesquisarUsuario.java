@@ -76,12 +76,12 @@ public class TelaPesquisarUsuario extends JDialog {
 		contentPane.add(txtTelefone);
 		txtTelefone.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Pesquisar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Pesquisar Usuário");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEndereco = new JLabel("Endere\u00E7o:");
+		JLabel lblEndereco = new JLabel("Endereço:");
 		lblEndereco.setBounds(27, 284, 65, 14);
 		contentPane.add(lblEndereco);
 		

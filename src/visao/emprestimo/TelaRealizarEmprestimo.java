@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import DAO.LivroDAO;
 import controle.LivroControle;
@@ -34,7 +35,7 @@ public class TelaRealizarEmprestimo extends JDialog {
 	 * Create the frame.
 	 * @param table 
 	 */
-	public TelaRealizarEmprestimo(JTable table) {
+	public TelaRealizarEmprestimo(DefaultTableModel table) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -48,7 +49,7 @@ public class TelaRealizarEmprestimo extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblCodigo = new JLabel("C\u00F3digo:");
+		JLabel lblCodigo = new JLabel("Código");
 		lblCodigo.setBounds(27, 292, 46, 14);
 		contentPane.add(lblCodigo);
 		
@@ -71,7 +72,7 @@ public class TelaRealizarEmprestimo extends JDialog {
 		contentPane.add(txtCodigo);
 		txtCodigo.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Realizar Empréstimo");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(99, 160, 173, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -85,17 +86,17 @@ public class TelaRealizarEmprestimo extends JDialog {
 					}else{
 						Usuario usuario = UsuarioControle.pesquisarUsuario(txtCpf.getText());
 						if(usuario==null){
-							JOptionPane.showMessageDialog(null,"Usu�rio com esse CPF inexistente");
+							JOptionPane.showMessageDialog(null,"Usuário com esse CPF inexistente");
 							return;
 						}else{
 							Livro livro = LivroControle.pesquisarLivro(txtCodigo.getText());
 							if(livro==null){
-								JOptionPane.showMessageDialog(null,"Livro com esse C�digo inexistente");
+								JOptionPane.showMessageDialog(null,"Livro com esse Código inexistente");
 								return;
 							}else{
 								boolean resposta = LivroControle.emprestarLivro(livro.getCodigo(), usuario.getCpf());
 								if(resposta){
-									JOptionPane.showMessageDialog(null,"Livro de C�digo = "+livro.getCodigo()+" foi emprestado com sucesso ao usu�rio de CPF = "+usuario.getCpf());
+									JOptionPane.showMessageDialog(null,"Livro de Código = "+livro.getCodigo()+" foi emprestado com sucesso ao usuário de CPF = "+usuario.getCpf());
 									setVisible(false);
 									Object[][] dados = null;
 									try {
@@ -104,14 +105,10 @@ public class TelaRealizarEmprestimo extends JDialog {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();
 									}
-									ArrayList<Livro> list = LivroControle.listarLivrosEmprestados();
-									table.setValueAt(dados[list.size() - 1][0], list.size() - 1, 0);
-									table.setValueAt(dados[list.size() - 1][1], list.size() - 1, 1);
-									table.setValueAt(dados[list.size() - 1][2], list.size() - 1, 2);
-									table.setValueAt(dados[list.size() - 1][3], list.size() - 1, 3);
+									table.addRow(new Object[]{usuario.getCpf(),usuario.getNome(),livro.getCodigo(),livro.getTitulo()});
 									
 								}else{
-									JOptionPane.showMessageDialog(null,"Erro ao processar emprestimo");
+									JOptionPane.showMessageDialog(null,"Livro já emprestado a outro usuário");
 								}
 							}
 						}

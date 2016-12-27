@@ -1,5 +1,6 @@
 package controle;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import DAO.UsuarioDAO;
 import excecoes.ObjetoExistente;
@@ -15,8 +16,13 @@ public class UsuarioControle {
 
 	public static boolean deletarUsuario(String cpf) {
 
-		if (UsuarioDAO.deletarUsuario(cpf)) {
-			return true;
+		try {
+			if (UsuarioDAO.deletarUsuario(cpf)) {
+				return true;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return false;

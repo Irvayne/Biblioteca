@@ -46,7 +46,7 @@ public class TelaListarTodos extends JDialog {
 		lblImg.setBounds(10, 11, 130, 121);
 		contentPane.add(lblImg);
 		
-		JLabel lblCadastrarLivro = new JLabel("Todos os Usu�rios");
+		JLabel lblCadastrarLivro = new JLabel("Todos os Usuários");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -71,7 +71,7 @@ public class TelaListarTodos extends JDialog {
 			dados[i][3] = lista.get(i).getEndereco();
 		}
 		
-		String [] colunas = {"CPF", "Nome", "Telefone", "Endereco"};
+		String [] colunas = {"CPF", "Nome", "Telefone", "Endereço"};
 		
 		table = new JTable(dados,colunas);
 		table.setEnabled(false);

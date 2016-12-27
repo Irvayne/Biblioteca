@@ -51,7 +51,37 @@ public class LivroDAO {
 					System.out.println("ERROR - INSERT LIVRO\n" + e.getMessage());
 				}
 			}else{
-				throw new ObjetoExistente("LIVRO COM MESMO CÃ“DIGO JÃ� CADASTRADO\n");
+				throw new ObjetoExistente("Livro com mesmo código já cadastrado\n");
+			}
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public static boolean editarLivro(String titulo, String autor, String editora, int ano, String codigo, String edicao, String descricao) throws ObjetoExistente{
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			
+			e1.printStackTrace();
+		}
+		try {
+			if(pesquisarLivro(codigo) != null){
+				Statement st;
+				try{
+					st = (Statement) Conexao.getConnection().createStatement();
+					String cmd = "update livros set titulo = '" + titulo + "', autor = '" + autor + "', editora = '" + editora + "', ano = " + ano + ", edicao = '" + edicao + "', descricao = '" + descricao + "' where codigo = '" + codigo + "'";
+					System.out.println("SQL UPDATE LIVRO: " + cmd);
+					st.executeUpdate(cmd);
+					st.close();
+					return true;
+				}catch(Exception e){
+					System.out.println("ERROR - INSERT LIVRO\n" + e.getMessage());
+				}
+			}else{
+				throw new ObjetoExistente("Livro com mesmo código já cadastrado\n");
 			}
 		} catch (SQLException e) {
 			
@@ -78,13 +108,13 @@ public class LivroDAO {
 						System.out.println("ERROR - EMPRESTAR LIVRO\n");
 					}
 				}else{
-					System.out.println("LIVRO JÃ� EMPRESTADO A OUTRO USUARIO");
+					System.out.println("Livro já emprestado a outro usuário");
 				}
 			}else{
-				System.out.println("CPF DE USUÃ�RIO NÃƒO ENCONTRADO");
+				System.out.println("CPF de usuário não encontrado");
 			}
 		}else{
-			System.out.println("CÃ“DIGO DE LIVRO NÃƒO ENCONTRADO");
+			System.out.println("Código de livro não encontrado");
 		}
 		return false;
 	}
@@ -111,7 +141,7 @@ public class LivroDAO {
 						
 					}
 				}else{
-					System.out.println("Livro não se encontra emprestado no momento");
+					System.out.println("Livro não está emprestado");
 				}
 			}else{
 				System.out.println("Código de livro não encontrado!");
@@ -143,10 +173,8 @@ public class LivroDAO {
 		
 		ArrayList<Livro> livrosCompletos = new ArrayList<Livro>();
 		
-		for (Livro livro : livros ){
-			
-			livrosCompletos.add(pesquisarLivroEmprestado(livro.getCodigo()));
-		}
+		for (Livro livro : livros )
+			livrosCompletos.add(pesquisarLivro(livro.getCodigo()));
 		
 		return livrosCompletos;
 	}
@@ -154,6 +182,7 @@ public class LivroDAO {
 	public static boolean deletarLivro(String codigo) throws ObjetoInexistente, SQLException{
 		createTable();
 		if(pesquisarLivro(codigo) != null){
+			if(pesquisarLivroEmprestado(codigo) == null){
 			Statement st;
 			try{
 				st = (Statement) Conexao.getConnection().createStatement();
@@ -165,8 +194,11 @@ public class LivroDAO {
 			}catch(Exception e){
 				System.err.println("ERROR - DELETE LIVRO\n");
 			}
+			}else{
+				throw new ObjetoInexistente("O livro não pode ser removido, pois está emprestado");
+			}
 		}else{
-			throw new ObjetoInexistente("CÃ“DIGO NÃƒO ENCONTRADO NO BANCO DE DADOS!");
+			throw new ObjetoInexistente("Código de livro não encontrado");
 		}
 		return false;
 	}
@@ -199,7 +231,7 @@ public class LivroDAO {
 			String cmd = "select * from livros where codigo = '" + codigo + "'";
 			ResultSet rs = st.executeQuery(cmd);
 			if(rs.next()){
-				l = new Livro(rs.getLong("id"),rs.getString("titulo"),rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"));
+				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"),rs.getString("edicao"),rs.getString("descricao"));
 			}
 		}catch(Exception e){
 			System.err.println("ERROR - PESQUISAR LIVRO\n" + e.getMessage());
@@ -213,10 +245,26 @@ public class LivroDAO {
 		Statement st;
 		try{
 			st = (Statement) Conexao.getConnection().createStatement();
-			String cmd = "select * from livros where codigo = '" + codigo + "'";
+			String cmd = "select * from emprestimo where codigo = '" + codigo + "'";
 			ResultSet rs = st.executeQuery(cmd);
 			if(rs.next())
-				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"),rs.getString("edicao"),rs.getString("descricao"));
+				l = new Livro(rs.getString("codigo"));
+		}catch(Exception e ){
+			System.out.println("ERROR - PESQUISAR LIVRO EMPRESTADO");
+		}
+		return l;
+	}
+	
+	public static Livro pesquisarLivroEmprestadoCPF(String cpf) throws SQLException{
+		createTable();
+		Livro l = null;
+		Statement st;
+		try{
+			st = (Statement) Conexao.getConnection().createStatement();
+			String cmd = "select * from emprestimo where cpf = '" + cpf + "'";
+			ResultSet rs = st.executeQuery(cmd);
+			if(rs.next())
+				l = new Livro(rs.getString("codigo"));
 		}catch(Exception e ){
 			System.out.println("ERROR - PESQUISAR LIVRO EMPRESTADO");
 		}

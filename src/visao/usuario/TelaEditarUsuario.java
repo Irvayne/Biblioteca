@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import controle.UsuarioControle;
+import DAO.UsuarioDAO;
 import excecoes.ObjetoExistente;
 import modelo.Usuario;
 
@@ -70,12 +70,12 @@ public class TelaEditarUsuario extends JDialog {
 		contentPane.add(txtTelefone);
 		txtTelefone.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Editar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Editar Usu√°rio");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEndereco = new JLabel("Endere\u00E7o:");
+		JLabel lblEndereco = new JLabel("Endere√ßo:");
 		lblEndereco.setBounds(27, 284, 65, 14);
 		contentPane.add(lblEndereco);
 		
@@ -93,7 +93,7 @@ public class TelaEditarUsuario extends JDialog {
 		txtTelefone.setText(usuario.getTelefone());
 		txtEndereco.setText(usuario.getEndereco());
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
+		JButton btnCadastrar = new JButton("Editar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txtEndereco.getText().equals("") || lblCpfTxt.getText().equals("") || txtNome.getText().equals("") || txtTelefone.getText().equals("")){
@@ -103,12 +103,12 @@ public class TelaEditarUsuario extends JDialog {
 					
 					Usuario usuario = new Usuario(txtNome.getText(), lblCpfTxt.getText(), txtEndereco.getText(), txtTelefone.getText());
 					try {
-						UsuarioControle.inserirUsuario(usuario);
+						UsuarioDAO.editarUsuario(usuario.getNome(), usuario.getCpf(), usuario.getEndereco(), usuario.getTelefone());
 					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Usu·rio com esse CPF j· cadastrado");
+						JOptionPane.showMessageDialog(null, "Usu√°rio com esse CPF j√° cadastrado");
 						return;
 					}
-					JOptionPane.showMessageDialog(null, "Usu·rio cadastrado com sucesso");
+					JOptionPane.showMessageDialog(null, "Usu√°rio editado com sucesso");
 					setVisible(false);
 					
 				}
@@ -127,7 +127,5 @@ public class TelaEditarUsuario extends JDialog {
 		});
 		btnFechar.setBounds(183, 507, 89, 23);
 		contentPane.add(btnFechar);
-		
-		
 	}
 }

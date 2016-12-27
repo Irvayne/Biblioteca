@@ -44,7 +44,7 @@ public class TelaPesquisarLivro extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTtulo = new JLabel("T\u00EDtulo:");
+		JLabel lblTtulo = new JLabel("Título:");
 		lblTtulo.setBounds(27, 187, 46, 14);
 		contentPane.add(lblTtulo);
 		
@@ -65,7 +65,7 @@ public class TelaPesquisarLivro extends JDialog {
 		lblAno.setBounds(27, 262, 46, 14);
 		contentPane.add(lblAno);
 		
-		JLabel lblCdigo = new JLabel("C\u00F3digo: ");
+		JLabel lblCdigo = new JLabel("Código: ");
 		lblCdigo.setBounds(27, 160, 46, 14);
 		contentPane.add(lblCdigo);
 		
@@ -104,7 +104,7 @@ public class TelaPesquisarLivro extends JDialog {
 		lblCadastrarLivro.setBounds(150, 82, 117, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEdio = new JLabel("Edi\u00E7\u00E3o: ");
+		JLabel lblEdio = new JLabel("Edição: ");
 		lblEdio.setBounds(27, 287, 46, 14);
 		contentPane.add(lblEdio);
 		
@@ -114,7 +114,7 @@ public class TelaPesquisarLivro extends JDialog {
 		contentPane.add(txtEdicao);
 		txtEdicao.setColumns(10);
 		
-		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o: ");
+		JLabel lblDescrio = new JLabel("Descrição: ");
 		lblDescrio.setBounds(27, 312, 65, 14);
 		contentPane.add(lblDescrio);
 		

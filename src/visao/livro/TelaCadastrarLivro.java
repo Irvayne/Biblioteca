@@ -47,7 +47,7 @@ public class TelaCadastrarLivro extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTtulo = new JLabel("T\u00EDtulo:");
+		JLabel lblTtulo = new JLabel("Título:");
 		lblTtulo.setBounds(27, 187, 46, 14);
 		contentPane.add(lblTtulo);
 		
@@ -68,7 +68,7 @@ public class TelaCadastrarLivro extends JDialog {
 		lblAno.setBounds(27, 262, 46, 14);
 		contentPane.add(lblAno);
 		
-		JLabel lblCdigo = new JLabel("C\u00F3digo: ");
+		JLabel lblCdigo = new JLabel("Código: ");
 		lblCdigo.setBounds(27, 160, 46, 14);
 		contentPane.add(lblCdigo);
 		
@@ -102,7 +102,7 @@ public class TelaCadastrarLivro extends JDialog {
 		lblCadastrarLivro.setBounds(150, 82, 117, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEdio = new JLabel("Edi\u00E7\u00E3o: ");
+		JLabel lblEdio = new JLabel("Edição: ");
 		lblEdio.setBounds(27, 287, 46, 14);
 		contentPane.add(lblEdio);
 		
@@ -111,7 +111,7 @@ public class TelaCadastrarLivro extends JDialog {
 		contentPane.add(txtEdicao);
 		txtEdicao.setColumns(10);
 		
-		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o: ");
+		JLabel lblDescrio = new JLabel("Descrição: ");
 		lblDescrio.setBounds(27, 312, 65, 14);
 		contentPane.add(lblDescrio);
 		
@@ -129,14 +129,14 @@ public class TelaCadastrarLivro extends JDialog {
 					try{
 					Integer.parseInt(txtAno.getText());
 					}catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, "O valor no campo ano � inv�lido");
+						JOptionPane.showMessageDialog(null, "O valor no campo ano é inválido");
 						return;
 					}
 					Livro livro = new Livro(txtTitulo.getText(), txtAutor.getText(), Integer.parseInt(txtAno.getText()), txtCodigo.getText(), txtEditora.getText(), txtEdicao.getText(), textArea.getText());
 					try {
 						LivroControle.inserirLivro(livro);
 					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Livro com esse c�digo j� cadastrado");
+						JOptionPane.showMessageDialog(null, "Livro com esse código já cadastrado");
 						return;
 					}
 					JOptionPane.showMessageDialog(null, "Livro cadastrado com sucesso");

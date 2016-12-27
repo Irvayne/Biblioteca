@@ -1,4 +1,4 @@
-package visao.livro;
+package visao.usuario;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,11 +15,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
-import controle.LivroControle;
-import modelo.Livro;
+import DAO.UsuarioDAO;
+import modelo.Usuario;
 
 @SuppressWarnings("serial")
-public class TelaListarTodos extends JDialog {
+public class TelaUsuariosPendentes extends JDialog {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -27,7 +27,7 @@ public class TelaListarTodos extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public TelaListarTodos() {
+	public TelaUsuariosPendentes() {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -42,13 +42,13 @@ public class TelaListarTodos extends JDialog {
 		contentPane.setLayout(null);
 		
 		JLabel lblImg = new JLabel("");
-		lblImg.setIcon(new ImageIcon(getClass().getResource("/img/livro.png")));
+		lblImg.setIcon(new ImageIcon(getClass().getResource("/img/usuario.jpg")));
 		lblImg.setBounds(10, 11, 130, 121);
 		contentPane.add(lblImg);
 		
-		JLabel lblCadastrarLivro = new JLabel("Todos os Livros");
+		JLabel lblCadastrarLivro = new JLabel("Usuários Pendentes");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblCadastrarLivro.setBounds(150, 82, 117, 41);
+		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
 		
 		JButton btnFechar = new JButton("Fechar");
@@ -61,17 +61,17 @@ public class TelaListarTodos extends JDialog {
 		contentPane.add(btnFechar);
 		
 		
-		List<Livro> lista = LivroControle.listarLivros();
+		List<Usuario> lista = UsuarioDAO.listarUsuariosPendentes();
 		Object [][] dados = new Object[lista.size()][4];
 		
 		for(int i = 0; i< lista.size(); i++){
-			dados[i][0] = lista.get(i).getCodigo();
-			dados[i][1] = lista.get(i).getTitulo();
-			dados[i][2] = lista.get(i).getAutor();
-			dados[i][3] = lista.get(i).getEdicao();
+			dados[i][0] = lista.get(i).getCpf();
+			dados[i][1] = lista.get(i).getNome();
+			dados[i][2] = lista.get(i).getTelefone();
+			dados[i][3] = lista.get(i).getEndereco();
 		}
 		
-		String [] colunas = {"Código", "Título", "Autor", "Edição"};
+		String [] colunas = {"CPF", "Nome", "Telefone", "Endereço"};
 		
 		table = new JTable(dados,colunas);
 		table.setEnabled(false);

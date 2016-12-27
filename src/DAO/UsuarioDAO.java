@@ -47,7 +47,7 @@ public class UsuarioDAO {
 		return false;
 	}
 	
-	public static boolean deletarUsuario(String cpf){
+	public static boolean editarUsuario(String nome, String cpf, String endereco, String telefone) throws ObjetoExistente{
 		try {
 			createTable();
 		} catch (SQLException e1) {
@@ -58,12 +58,41 @@ public class UsuarioDAO {
 			Statement st;
 			try{
 				st = (Statement) Conexao.getConnection().createStatement();
+				String cmd = "update usuario set nome = '" + nome + "', endereco = '" + endereco + "', telefone = '" + telefone + "' where cpf = '" + cpf + "'";
+				System.out.println("SQL INSERT USUARIO\n" + cmd);
+				st.executeUpdate(cmd);
+				st.close();
+				return true;
+			}catch(Exception e){
+				System.err.println("ERRO INSERT USUARIO");
+			}
+		}else{
+			throw new ObjetoExistente("USUARIO COM MESMO CPF JÃ� CADASTRADO!");
+		}
+		return false;
+	}
+	
+	public static boolean deletarUsuario(String cpf) throws SQLException{
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if(pesquisarUsuario(cpf) != null){
+			if(LivroDAO.pesquisarLivroEmprestadoCPF(cpf) == null){
+			Statement st;
+			try{
+				st = (Statement) Conexao.getConnection().createStatement();
 				String cmd = "delete from usuario where cpf = '" + cpf + "'";
 				st.executeUpdate(cmd);
 				st.close();
 				return true;
 			}catch(Exception e){
 				System.err.println("ERROR - DELETE USUARIO");
+			}
+			}else{
+				return false;
 			}
 		}
 		return false;
@@ -112,5 +141,27 @@ public class UsuarioDAO {
 			System.err.println("ERROR - PESQUISAR USUARIO");
 		}
 		return u;
+	}
+	
+	public static ArrayList<Usuario> listarUsuariosPendentes(){
+		try {
+			createTable();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+		Statement st;
+		try{
+			st = (Statement) Conexao.getConnection().createStatement();
+			String cmd = "select distinct(cpf) from emprestimo";
+			ResultSet rs = st.executeQuery(cmd);
+			while(rs.next()){
+				usuarios.add(pesquisarUsuario(rs.getString("cpf")));
+			}
+		}catch(Exception e){
+			
+		}
+		return usuarios;
 	}
 }     

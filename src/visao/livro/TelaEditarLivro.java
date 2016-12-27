@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import controle.LivroControle;
+import DAO.LivroDAO;
 import excecoes.ObjetoExistente;
 import modelo.Livro;
 
@@ -46,7 +46,7 @@ public class TelaEditarLivro extends JDialog {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTtulo = new JLabel("T\u00EDtulo:");
+		JLabel lblTtulo = new JLabel("Título:");
 		lblTtulo.setBounds(27, 187, 46, 14);
 		contentPane.add(lblTtulo);
 		
@@ -67,7 +67,7 @@ public class TelaEditarLivro extends JDialog {
 		lblAno.setBounds(27, 262, 46, 14);
 		contentPane.add(lblAno);
 		
-		JLabel lblCdigo = new JLabel("C\u00F3digo: ");
+		JLabel lblCdigo = new JLabel("Código: ");
 		lblCdigo.setBounds(27, 160, 46, 14);
 		contentPane.add(lblCdigo);
 		
@@ -100,7 +100,7 @@ public class TelaEditarLivro extends JDialog {
 		lblCadastrarLivro.setBounds(150, 82, 117, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEdio = new JLabel("Edi\u00E7\u00E3o: ");
+		JLabel lblEdio = new JLabel("Edição: ");
 		lblEdio.setBounds(27, 287, 46, 14);
 		contentPane.add(lblEdio);
 		
@@ -109,7 +109,7 @@ public class TelaEditarLivro extends JDialog {
 		contentPane.add(txtEdicao);
 		txtEdicao.setColumns(10);
 		
-		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o: ");
+		JLabel lblDescrio = new JLabel("Descrição: ");
 		lblDescrio.setBounds(27, 312, 65, 14);
 		contentPane.add(lblDescrio);
 		
@@ -117,7 +117,7 @@ public class TelaEditarLivro extends JDialog {
 		textArea.setBounds(93, 312, 209, 138);
 		contentPane.add(textArea);
 		
-		JButton btnCadastrar = new JButton("Cadastrar");
+		JButton btnCadastrar = new JButton("Editar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(txtAno.getText().equals("") || txtAutor.getText().equals("") || lblCodigo.getText().equals("") || txtEdicao.getText().equals("") || txtEditora.getText().equals("") || txtTitulo.getText().equals("") || textArea.getText().equals("")){
@@ -127,14 +127,14 @@ public class TelaEditarLivro extends JDialog {
 					try{
 					Integer.parseInt(txtAno.getText());
 					}catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, "O valor no campo ano � inv�lido");
+						JOptionPane.showMessageDialog(null, "O valor no campo ano é inválido");
 						return;
 					}
 					Livro livro = new Livro(txtTitulo.getText(), txtAutor.getText(), Integer.parseInt(txtAno.getText()), lblCodigo.getText(), txtEditora.getText(), txtEdicao.getText(), textArea.getText());
 					try {
-						LivroControle.inserirLivro(livro);
+						LivroDAO.editarLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), livro.getAno(), livro.getCodigo(), livro.getEdicao(), livro.getDescricao());
 					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Livro com esse c�digo j� cadastrado");
+						JOptionPane.showMessageDialog(null, "Livro com esse código já cadastrado");
 						return;
 					}
 					JOptionPane.showMessageDialog(null, "Livro alterado com sucesso");
@@ -157,16 +157,13 @@ public class TelaEditarLivro extends JDialog {
 		btnFechar.setBounds(165, 482, 89, 23);
 		contentPane.add(btnFechar);
 		
-		
 		txtAno.setText(livro.getAno()+"");
 		txtAutor.setText(livro.getAutor());
 		txtEdicao.setText(livro.getEdicao());
 		txtEditora.setText(livro.getEditora());
 		txtTitulo.setText(livro.getTitulo());
 		textArea.setText(livro.getDescricao());
-		
-		
-		
+
 		lblCodigo.setText(livro.getCodigo());
 	}
 }

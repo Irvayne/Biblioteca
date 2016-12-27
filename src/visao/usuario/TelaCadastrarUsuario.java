@@ -54,7 +54,7 @@ public class TelaCadastrarUsuario extends JDialog {
 		contentPane.add(lblImg);
 		
 		JLabel lblTelefone = new JLabel("Telefone:");
-		lblTelefone.setBounds(27, 246, 46, 14);
+		lblTelefone.setBounds(27, 245, 63, 14);
 		contentPane.add(lblTelefone);
 		
 		JLabel lblCpf = new JLabel("CPF:");
@@ -76,12 +76,12 @@ public class TelaCadastrarUsuario extends JDialog {
 		contentPane.add(txtTelefone);
 		txtTelefone.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Cadastrar Usu√°rio");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
 		
-		JLabel lblEndereco = new JLabel("Endere\u00E7o:");
+		JLabel lblEndereco = new JLabel("Endere√ßo:");
 		lblEndereco.setBounds(27, 284, 65, 14);
 		contentPane.add(lblEndereco);
 		
@@ -101,15 +101,12 @@ public class TelaCadastrarUsuario extends JDialog {
 					try {
 						UsuarioControle.inserirUsuario(usuario);
 					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Usu·rio com esse CPF j· cadastrado");
+						JOptionPane.showMessageDialog(null, "Usu√°rio com esse CPF j√° cadastrado");
 						return;
 					}
-					JOptionPane.showMessageDialog(null, "Usu·rio cadastrado com sucesso");
-					setVisible(false);
-					
+					JOptionPane.showMessageDialog(null, "Usu√°rio cadastrado com sucesso");
+					setVisible(false);	
 				}
-				
-				
 			}
 		});
 		btnCadastrar.setBounds(51, 507, 89, 23);
