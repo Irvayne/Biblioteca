@@ -20,10 +20,9 @@ import excecoes.ObjetoExistente;
 import modelo.Livro;
 
 @SuppressWarnings("serial")
-public class TelaCadastrarLivro extends JDialog {
+public class TelaEditarLivro extends JDialog {
 
 	private JPanel contentPane;
-	private JTextField txtCodigo;
 	private JTextField txtTitulo;
 	private JTextField txtAutor;
 	private JTextField txtEditora;
@@ -33,7 +32,7 @@ public class TelaCadastrarLivro extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastrarLivro() {
+	public TelaEditarLivro(Livro livro) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -72,10 +71,9 @@ public class TelaCadastrarLivro extends JDialog {
 		lblCdigo.setBounds(27, 160, 46, 14);
 		contentPane.add(lblCdigo);
 		
-		txtCodigo = new JTextField();
-		txtCodigo.setBounds(93, 156, 209, 23);
-		contentPane.add(txtCodigo);
-		txtCodigo.setColumns(10);
+		JLabel lblCodigo = new JLabel("");
+		lblCodigo.setBounds(94, 156, 208, 23);
+		contentPane.add(lblCodigo);
 		
 		txtTitulo = new JTextField();
 		txtTitulo.setBounds(93, 181, 209, 23);
@@ -97,7 +95,7 @@ public class TelaCadastrarLivro extends JDialog {
 		contentPane.add(txtAno);
 		txtAno.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Livro");
+		JLabel lblCadastrarLivro = new JLabel("Editar Livro");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 117, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -122,7 +120,7 @@ public class TelaCadastrarLivro extends JDialog {
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(txtAno.getText().equals("") || txtAutor.getText().equals("") || txtCodigo.getText().equals("") || txtEdicao.getText().equals("") || txtEditora.getText().equals("") || txtTitulo.getText().equals("") || textArea.getText().equals("")){
+				if(txtAno.getText().equals("") || txtAutor.getText().equals("") || lblCodigo.getText().equals("") || txtEdicao.getText().equals("") || txtEditora.getText().equals("") || txtTitulo.getText().equals("") || textArea.getText().equals("")){
 					//algum campo esta em branco
 					JOptionPane.showMessageDialog(null, "Todos os campos devem estar preenchidos");
 				}else{
@@ -132,14 +130,14 @@ public class TelaCadastrarLivro extends JDialog {
 						JOptionPane.showMessageDialog(null, "O valor no campo ano é inválido");
 						return;
 					}
-					Livro livro = new Livro(txtTitulo.getText(), txtAutor.getText(), Integer.parseInt(txtAno.getText()), txtCodigo.getText(), txtEditora.getText(), txtEdicao.getText(), textArea.getText());
+					Livro livro = new Livro(txtTitulo.getText(), txtAutor.getText(), Integer.parseInt(txtAno.getText()), lblCodigo.getText(), txtEditora.getText(), txtEdicao.getText(), textArea.getText());
 					try {
 						LivroControle.inserirLivro(livro);
 					} catch (ObjetoExistente e1) {
 						JOptionPane.showMessageDialog(null, "Livro com esse código já cadastrado");
 						return;
 					}
-					JOptionPane.showMessageDialog(null, "Livro cadastrado com sucesso");
+					JOptionPane.showMessageDialog(null, "Livro alterado com sucesso");
 					setVisible(false);
 					
 				}
@@ -158,5 +156,17 @@ public class TelaCadastrarLivro extends JDialog {
 		});
 		btnFechar.setBounds(165, 482, 89, 23);
 		contentPane.add(btnFechar);
+		
+		
+		txtAno.setText(livro.getAno()+"");
+		txtAutor.setText(livro.getAutor());
+		txtEdicao.setText(livro.getEdicao());
+		txtEditora.setText(livro.getEditora());
+		txtTitulo.setText(livro.getTitulo());
+		textArea.setText(livro.getDescricao());
+		
+		
+		
+		lblCodigo.setText(livro.getCodigo());
 	}
 }

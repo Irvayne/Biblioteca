@@ -2,21 +2,36 @@ package visao;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import DAO.LivroDAO;
+import controle.LivroControle;
+import controle.UsuarioControle;
+import excecoes.ObjetoInexistente;
+import modelo.Livro;
+import modelo.Usuario;
+import visao.emprestimo.TelaRealizarEmprestimo;
 import visao.livro.TelaCadastrarLivro;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import visao.livro.TelaEditarLivro;
+import visao.livro.TelaListarTodos;
+import visao.livro.TelaListarTodosEmprestimos;
+import visao.livro.TelaPesquisarLivro;
+import visao.usuario.TelaCadastrarUsuario;
+import visao.usuario.TelaEditarUsuario;
+import visao.usuario.TelaPesquisarUsuario;
 
 @SuppressWarnings("serial")
 public class TelaInicial extends JFrame {
@@ -65,22 +80,106 @@ public class TelaInicial extends JFrame {
 		panel.add(btnCadastrar);
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
+		btnPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String codigo = null;
+				Livro livro = null;
+				do{
+				do{
+				codigo = JOptionPane.showInputDialog("Digite o código do livro");
+				if(codigo==null)
+					return;
+				if(codigo.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um código de livro válido");
+				}while(codigo.equals(""));
+				
+				livro = LivroControle.pesquisarLivro(codigo);
+				if(livro==null){
+					JOptionPane.showMessageDialog(null,"Não existe livro cadastrado com código: "+codigo);
+				}else{
+					TelaPesquisarLivro telaPesquisarLivro = new TelaPesquisarLivro(livro);
+					telaPesquisarLivro.setVisible(true);
+				}
+				}while(livro==null);
+			}
+		});
 		btnPesquisar.setBounds(10, 256, 89, 50);
 		panel.add(btnPesquisar);
 		
+	
+		
 		JButton btnRemover = new JButton("Remover");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String codigo = null;
+				do{
+				codigo = JOptionPane.showInputDialog("Qual o código do livro a ser removido: ");
+				if(codigo==null)
+					return;
+				if(codigo.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um código de livro válido");
+				}while(codigo.equals(""));
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Tem certeza que deseja remover o livro de código: "+ codigo);
+				if(dialogResult == JOptionPane.YES_OPTION){
+				  try {
+					LivroControle.deletarLivro(codigo);
+					JOptionPane.showMessageDialog(null,"Livro de código: "+codigo+" removido com sucesso");
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(null,"Erro no banco de dados");
+				} catch (ObjetoInexistente e) {
+					JOptionPane.showMessageDialog(null,"Não existe livro cadastrado com o código: "+codigo);
+				}
+				}
+				
+			}
+		});
 		btnRemover.setBounds(10, 195, 89, 50);
 		panel.add(btnRemover);
 		
 		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String codigo = null;
+				Livro livro = null;
+				do{
+				do{
+				codigo = JOptionPane.showInputDialog("Digite o código do livro");
+				if(codigo==null)
+					return;
+				if(codigo.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um código de livro válido");
+				}while(codigo.equals(""));
+				
+				livro = LivroControle.pesquisarLivro(codigo);
+				if(livro==null){
+					JOptionPane.showMessageDialog(null,"Não existe livro cadastrado com código: "+codigo);
+				}else{
+					TelaEditarLivro telaEditarLivro = new TelaEditarLivro(livro);
+					telaEditarLivro.setVisible(true);
+				}
+				}while(livro==null);
+			}
+		});
 		btnEditar.setBounds(109, 134, 99, 50);
 		panel.add(btnEditar);
 		
 		JButton btnListarTodos = new JButton("Listar todos");
+		btnListarTodos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaListarTodos listarTodos = new TelaListarTodos();
+				listarTodos.setVisible(true);
+			}
+		});
 		btnListarTodos.setBounds(109, 197, 99, 48);
 		panel.add(btnListarTodos);
 		
 		JButton btnEmprstimos = new JButton("Empr\u00E9stimos");
+		btnEmprstimos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaListarTodosEmprestimos listarTodosEmprestimos = new TelaListarTodosEmprestimos();
+				listarTodosEmprestimos.setVisible(true);
+			}
+		});
 		btnEmprstimos.setBounds(109, 256, 99, 50);
 		panel.add(btnEmprstimos);
 		
@@ -102,22 +201,102 @@ public class TelaInicial extends JFrame {
 		panel_1.add(lblUsurio);
 		
 		JButton button = new JButton("Cadastrar");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaCadastrarUsuario cadastrarUsuario = new TelaCadastrarUsuario();
+				cadastrarUsuario.setVisible(true);
+			}
+		});
 		button.setBounds(10, 136, 89, 50);
 		panel_1.add(button);
 		
 		JButton button_1 = new JButton("Remover");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cpf = null;
+				do{
+				cpf = JOptionPane.showInputDialog("Qual o CPF do usuário a ser removido: ");
+				if(cpf==null)
+					return;
+				if(cpf.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um CPF válido");
+				}while(cpf.equals(""));
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Tem certeza que deseja remover o usuário de CPF: "+ cpf);
+				if(dialogResult == JOptionPane.YES_OPTION){
+				 
+					boolean resul = UsuarioControle.deletarUsuario(cpf);
+					if(resul){
+						JOptionPane.showMessageDialog(null,"Usuário de CPF: "+cpf+" removido com sucesso");
+					}else{
+						JOptionPane.showMessageDialog(null,"Não existe usuário cadastrado com esse CPF: "+cpf);
+					}
+				}
+			}
+		});
 		button_1.setBounds(10, 197, 89, 50);
 		panel_1.add(button_1);
 		
 		JButton button_2 = new JButton("Pesquisar");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cpf = null;
+				Usuario usuario = null;
+				do{
+				do{
+				cpf = JOptionPane.showInputDialog("Digite o CPF do usuário");
+				if(cpf==null)
+					return;
+				if(cpf.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um CPF válido");
+				}while(cpf.equals(""));
+				
+				usuario = UsuarioControle.pesquisarUsuario(cpf);
+				if(usuario==null){
+					JOptionPane.showMessageDialog(null,"Não existe usuário cadastrado com CPF: "+cpf);
+				}else{
+					TelaPesquisarUsuario telaPesquisarUsuario = new TelaPesquisarUsuario(usuario);
+					telaPesquisarUsuario.setVisible(true);
+				}
+				}while(usuario==null);
+			}
+		});
 		button_2.setBounds(10, 258, 89, 50);
 		panel_1.add(button_2);
 		
 		JButton button_3 = new JButton("Editar");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cpf = null;
+				Usuario usuario = null;
+				do{
+				do{
+				cpf = JOptionPane.showInputDialog("Digite o CPF do usuário");
+				if(cpf==null)
+					return;
+				if(cpf.equals(""))
+					JOptionPane.showMessageDialog(null,"Digite um CPF válido");
+				}while(cpf.equals(""));
+				
+				usuario = UsuarioControle.pesquisarUsuario(cpf);
+				if(usuario==null){
+					JOptionPane.showMessageDialog(null,"Não existe usuário cadastrado com CPF: "+cpf);
+				}else{
+					TelaEditarUsuario telaEditarUsuario = new TelaEditarUsuario(usuario);
+					telaEditarUsuario.setVisible(true);
+				}
+				}while(usuario==null);
+			}
+		});
 		button_3.setBounds(109, 136, 99, 50);
 		panel_1.add(button_3);
 		
 		JButton button_4 = new JButton("Listar todos");
+		button_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visao.usuario.TelaListarTodos listarTodos = new visao.usuario.TelaListarTodos();
+				listarTodos.setVisible(true);
+			}
+		});
 		button_4.setBounds(109, 197, 99, 48);
 		panel_1.add(button_4);
 		
@@ -142,11 +321,15 @@ public class TelaInicial extends JFrame {
 		lblEmprestimos.setBounds(372, 121, 139, 31);
 		panel_2.add(lblEmprestimos);
 		
-		Object [][] dados = {
-				{"Ana Monteiro", "48 9923-7898", "ana.monteiro@gmail.com", "fsafsdfds"},
-				{"João da Silva", "48 8890-3345", "joaosilva@hotmail.com", "fdsfsdf"},
-				{"Pedro Cascaes", "48 9870-5634", "pedrinho@gmail.com", "sdasfd"}
-			};
+		
+		
+		Object[][] dados = null;
+		try {
+			dados = LivroDAO.relacaoLivroUsuarioEmprestimo();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		String [] colunas = {"CPF", "Nome", "Código", "Título"};
 		
@@ -164,7 +347,14 @@ public class TelaInicial extends JFrame {
 		barraRolagem.setBounds(10, 170, 1079, 466);
 		panel_2.add(barraRolagem);
 		
+		
 		JButton btnNovoEmprstimo = new JButton("Novo Empr\u00E9stimo");
+		btnNovoEmprstimo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TelaRealizarEmprestimo emprestimo = new TelaRealizarEmprestimo(table);
+				emprestimo.setVisible(true);
+			}
+		});
 		btnNovoEmprstimo.setBounds(569, 11, 204, 67);
 		panel_2.add(btnNovoEmprstimo);
 		

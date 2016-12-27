@@ -10,17 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import controle.UsuarioControle;
-import excecoes.ObjetoExistente;
 import modelo.Usuario;
 
 @SuppressWarnings("serial")
-public class TelaCadastrarUsuario extends JDialog {
+public class TelaPesquisarUsuario extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField txtCpf;
@@ -30,7 +27,7 @@ public class TelaCadastrarUsuario extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastrarUsuario() {
+	public TelaPesquisarUsuario(Usuario usuario) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -62,21 +59,24 @@ public class TelaCadastrarUsuario extends JDialog {
 		contentPane.add(lblCpf);
 		
 		txtCpf = new JTextField();
+		txtCpf.setEditable(false);
 		txtCpf.setBounds(93, 156, 209, 30);
 		contentPane.add(txtCpf);
 		txtCpf.setColumns(10);
 		
 		txtNome = new JTextField();
+		txtNome.setEditable(false);
 		txtNome.setBounds(93, 197, 209, 30);
 		contentPane.add(txtNome);
 		txtNome.setColumns(10);
 		
 		txtTelefone = new JTextField();
+		txtTelefone.setEditable(false);
 		txtTelefone.setBounds(93, 238, 209, 30);
 		contentPane.add(txtTelefone);
 		txtTelefone.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Pesquisar Usu\u00E1rio");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -86,34 +86,9 @@ public class TelaCadastrarUsuario extends JDialog {
 		contentPane.add(lblEndereco);
 		
 		TextArea txtEndereco = new TextArea();
+		txtEndereco.setEditable(false);
 		txtEndereco.setBounds(93, 283, 209, 138);
 		contentPane.add(txtEndereco);
-		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(txtEndereco.getText().equals("") || txtCpf.getText().equals("") || txtNome.getText().equals("") || txtTelefone.getText().equals("")){
-					//algum campo esta em branco
-					JOptionPane.showMessageDialog(null, "Todos os campos devem estar preenchidos");
-				}else{
-					
-					Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtEndereco.getText(), txtTelefone.getText());
-					try {
-						UsuarioControle.inserirUsuario(usuario);
-					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Usuário com esse CPF já cadastrado");
-						return;
-					}
-					JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso");
-					setVisible(false);
-					
-				}
-				
-				
-			}
-		});
-		btnCadastrar.setBounds(51, 507, 89, 23);
-		contentPane.add(btnCadastrar);
 		
 		JButton btnFechar = new JButton("Fechar");
 		btnFechar.addActionListener(new ActionListener() {
@@ -121,7 +96,12 @@ public class TelaCadastrarUsuario extends JDialog {
 				setVisible(false);
 			}
 		});
-		btnFechar.setBounds(183, 507, 89, 23);
+		btnFechar.setBounds(112, 507, 89, 23);
 		contentPane.add(btnFechar);
+		
+		txtCpf.setText(usuario.getCpf());
+		txtNome.setText(usuario.getNome());
+		txtTelefone.setText(usuario.getTelefone());
+		txtEndereco.setText(usuario.getEndereco());
 	}
 }

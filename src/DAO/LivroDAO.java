@@ -10,6 +10,7 @@ import com.mysql.jdbc.Statement;
 import excecoes.ObjetoExistente;
 import excecoes.ObjetoInexistente;
 import modelo.Livro;
+import modelo.Usuario;
 
 public class LivroDAO {
 	
@@ -212,7 +213,7 @@ public class LivroDAO {
 		Statement st;
 		try{
 			st = (Statement) Conexao.getConnection().createStatement();
-			String cmd = "select * from emprestimo where codigo = '" + codigo + "'";
+			String cmd = "select * from livros where codigo = '" + codigo + "'";
 			ResultSet rs = st.executeQuery(cmd);
 			if(rs.next())
 				l = new Livro(rs.getString("titulo"), rs.getString("autor"), rs.getInt("ano"), rs.getString("codigo"), rs.getString("editora"),rs.getString("edicao"),rs.getString("descricao"));
@@ -220,5 +221,28 @@ public class LivroDAO {
 			System.out.println("ERROR - PESQUISAR LIVRO EMPRESTADO");
 		}
 		return l;
+	}
+	
+	public static Object[][] relacaoLivroUsuarioEmprestimo() throws SQLException{
+		ArrayList<Livro> arrayList = listarLivrosEmprestados();
+		Object[][] objects = new Object[arrayList.size()][4];
+		int i = 0;
+		for(Livro aux: arrayList){
+			Statement st;
+			
+				st = (Statement) Conexao.getConnection().createStatement();
+				String cmd = "select cpf from emprestimo where codigo = '"+aux.getCodigo()+"'";
+				ResultSet rs = st.executeQuery(cmd);
+				while(rs.next()){
+					String cpf = rs.getString("cpf");
+					Usuario usuario = UsuarioDAO.pesquisarUsuario(cpf);
+					objects[i][0] = usuario.getCpf();
+					objects[i][1] = usuario.getNome();
+					objects[i][2] = aux.getCodigo();
+					objects[i][3] = aux.getTitulo();
+				}
+				i++;
+		}
+		return objects;
 	}
 }

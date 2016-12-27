@@ -7,15 +7,10 @@ import modelo.Usuario;
 
 public class UsuarioControle {
 
-	public static boolean inserirUsuario(Usuario u) {
-		try {
+	public static void inserirUsuario(Usuario u) throws ObjetoExistente {
+		
 			UsuarioDAO.inserirUsuario(u.getNome(), u.getCpf(), u.getEndereco(), u.getTelefone());
-			return true;
-		} catch (ObjetoExistente e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+		
 	}
 
 	public static boolean deletarUsuario(String cpf) {

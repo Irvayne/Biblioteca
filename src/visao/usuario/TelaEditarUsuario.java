@@ -20,17 +20,16 @@ import excecoes.ObjetoExistente;
 import modelo.Usuario;
 
 @SuppressWarnings("serial")
-public class TelaCadastrarUsuario extends JDialog {
+public class TelaEditarUsuario extends JDialog {
 
 	private JPanel contentPane;
-	private JTextField txtCpf;
 	private JTextField txtNome;
 	private JTextField txtTelefone;
 
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastrarUsuario() {
+	public TelaEditarUsuario(Usuario usuario) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -61,11 +60,6 @@ public class TelaCadastrarUsuario extends JDialog {
 		lblCpf.setBounds(27, 164, 46, 14);
 		contentPane.add(lblCpf);
 		
-		txtCpf = new JTextField();
-		txtCpf.setBounds(93, 156, 209, 30);
-		contentPane.add(txtCpf);
-		txtCpf.setColumns(10);
-		
 		txtNome = new JTextField();
 		txtNome.setBounds(93, 197, 209, 30);
 		contentPane.add(txtNome);
@@ -76,7 +70,7 @@ public class TelaCadastrarUsuario extends JDialog {
 		contentPane.add(txtTelefone);
 		txtTelefone.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Usu\u00E1rio");
+		JLabel lblCadastrarLivro = new JLabel("Editar Usu\u00E1rio");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 173, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -89,15 +83,25 @@ public class TelaCadastrarUsuario extends JDialog {
 		txtEndereco.setBounds(93, 283, 209, 138);
 		contentPane.add(txtEndereco);
 		
+		JLabel lblCpfTxt = new JLabel("");
+		lblCpfTxt.setText(usuario.getCpf());
+		lblCpfTxt.setBounds(93, 156, 209, 30);
+		contentPane.add(lblCpfTxt);
+		
+		lblCpfTxt.setText(usuario.getCpf());
+		txtNome.setText(usuario.getNome());
+		txtTelefone.setText(usuario.getTelefone());
+		txtEndereco.setText(usuario.getEndereco());
+		
 		JButton btnCadastrar = new JButton("Cadastrar");
 		btnCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(txtEndereco.getText().equals("") || txtCpf.getText().equals("") || txtNome.getText().equals("") || txtTelefone.getText().equals("")){
+				if(txtEndereco.getText().equals("") || lblCpfTxt.getText().equals("") || txtNome.getText().equals("") || txtTelefone.getText().equals("")){
 					//algum campo esta em branco
 					JOptionPane.showMessageDialog(null, "Todos os campos devem estar preenchidos");
 				}else{
 					
-					Usuario usuario = new Usuario(txtNome.getText(), txtCpf.getText(), txtEndereco.getText(), txtTelefone.getText());
+					Usuario usuario = new Usuario(txtNome.getText(), lblCpfTxt.getText(), txtEndereco.getText(), txtTelefone.getText());
 					try {
 						UsuarioControle.inserirUsuario(usuario);
 					} catch (ObjetoExistente e1) {
@@ -123,5 +127,7 @@ public class TelaCadastrarUsuario extends JDialog {
 		});
 		btnFechar.setBounds(183, 507, 89, 23);
 		contentPane.add(btnFechar);
+		
+		
 	}
 }

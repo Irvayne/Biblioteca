@@ -14,18 +14,16 @@ public class LivroControle {
 	 * insere o livro que foi passado por parametro
 	 * 
 	 * @param livro
+	 * @throws ObjetoExistente 
 	 */
 
-	public static boolean inserirLivro(Livro livro) {
-		try {
+	public static void inserirLivro(Livro livro) throws ObjetoExistente {
+		
 			LivroDAO.inserirLivro(livro.getTitulo(), livro.getAutor(), livro.getEditora(), livro.getAno(),
 					livro.getCodigo(), livro.getEdicao(), livro.getDescricao());
-			System.out.println("Livro cadastrado com sucesso!");
-			return true;
-		} catch (ObjetoExistente e) {
-			System.err.println(e.getMessage());
-		}
-		return false;
+			
+			
+		
 	}
 
 	/**
@@ -33,14 +31,13 @@ public class LivroControle {
 	 * 
 	 * @param codigo
 	 * @throws SQLException
+	 * @throws ObjetoInexistente 
 	 */
-	public static void deletarLivro(String codigo) throws SQLException {
-		try {
+	public static void deletarLivro(String codigo) throws SQLException, ObjetoInexistente {
+		
 			LivroDAO.deletarLivro(codigo);
 			System.out.println("Livro deletado com sucesso!");
-		} catch (ObjetoInexistente e) {
-			System.err.println(e.getMessage());
-		}
+		
 	}
 
 	/**

@@ -10,17 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import controle.LivroControle;
-import excecoes.ObjetoExistente;
 import modelo.Livro;
 
 @SuppressWarnings("serial")
-public class TelaCadastrarLivro extends JDialog {
+public class TelaPesquisarLivro extends JDialog {
 
 	private JPanel contentPane;
 	private JTextField txtCodigo;
@@ -33,7 +30,7 @@ public class TelaCadastrarLivro extends JDialog {
 	/**
 	 * Create the frame.
 	 */
-	public TelaCadastrarLivro() {
+	public TelaPesquisarLivro(Livro livro) {
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -73,31 +70,36 @@ public class TelaCadastrarLivro extends JDialog {
 		contentPane.add(lblCdigo);
 		
 		txtCodigo = new JTextField();
+		txtCodigo.setEditable(false);
 		txtCodigo.setBounds(93, 156, 209, 23);
 		contentPane.add(txtCodigo);
 		txtCodigo.setColumns(10);
 		
 		txtTitulo = new JTextField();
+		txtTitulo.setEditable(false);
 		txtTitulo.setBounds(93, 181, 209, 23);
 		contentPane.add(txtTitulo);
 		txtTitulo.setColumns(10);
 		
 		txtAutor = new JTextField();
+		txtAutor.setEditable(false);
 		txtAutor.setBounds(93, 206, 209, 23);
 		contentPane.add(txtAutor);
 		txtAutor.setColumns(10);
 		
 		txtEditora = new JTextField();
+		txtEditora.setEditable(false);
 		txtEditora.setBounds(93, 231, 209, 23);
 		contentPane.add(txtEditora);
 		txtEditora.setColumns(10);
 		
 		txtAno = new JTextField();
+		txtAno.setEditable(false);
 		txtAno.setBounds(93, 256, 209, 23);
 		contentPane.add(txtAno);
 		txtAno.setColumns(10);
 		
-		JLabel lblCadastrarLivro = new JLabel("Cadastrar Livro");
+		JLabel lblCadastrarLivro = new JLabel("Pesquisar Livro");
 		lblCadastrarLivro.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblCadastrarLivro.setBounds(150, 82, 117, 41);
 		contentPane.add(lblCadastrarLivro);
@@ -107,6 +109,7 @@ public class TelaCadastrarLivro extends JDialog {
 		contentPane.add(lblEdio);
 		
 		txtEdicao = new JTextField();
+		txtEdicao.setEditable(false);
 		txtEdicao.setBounds(93, 283, 209, 23);
 		contentPane.add(txtEdicao);
 		txtEdicao.setColumns(10);
@@ -116,39 +119,9 @@ public class TelaCadastrarLivro extends JDialog {
 		contentPane.add(lblDescrio);
 		
 		TextArea textArea = new TextArea();
+		textArea.setEditable(false);
 		textArea.setBounds(93, 312, 209, 138);
 		contentPane.add(textArea);
-		
-		JButton btnCadastrar = new JButton("Cadastrar");
-		btnCadastrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(txtAno.getText().equals("") || txtAutor.getText().equals("") || txtCodigo.getText().equals("") || txtEdicao.getText().equals("") || txtEditora.getText().equals("") || txtTitulo.getText().equals("") || textArea.getText().equals("")){
-					//algum campo esta em branco
-					JOptionPane.showMessageDialog(null, "Todos os campos devem estar preenchidos");
-				}else{
-					try{
-					Integer.parseInt(txtAno.getText());
-					}catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, "O valor no campo ano é inválido");
-						return;
-					}
-					Livro livro = new Livro(txtTitulo.getText(), txtAutor.getText(), Integer.parseInt(txtAno.getText()), txtCodigo.getText(), txtEditora.getText(), txtEdicao.getText(), textArea.getText());
-					try {
-						LivroControle.inserirLivro(livro);
-					} catch (ObjetoExistente e1) {
-						JOptionPane.showMessageDialog(null, "Livro com esse código já cadastrado");
-						return;
-					}
-					JOptionPane.showMessageDialog(null, "Livro cadastrado com sucesso");
-					setVisible(false);
-					
-				}
-				
-				
-			}
-		});
-		btnCadastrar.setBounds(51, 482, 89, 23);
-		contentPane.add(btnCadastrar);
 		
 		JButton btnFechar = new JButton("Fechar");
 		btnFechar.addActionListener(new ActionListener() {
@@ -156,7 +129,15 @@ public class TelaCadastrarLivro extends JDialog {
 				setVisible(false);
 			}
 		});
-		btnFechar.setBounds(165, 482, 89, 23);
+		btnFechar.setBounds(106, 483, 89, 23);
 		contentPane.add(btnFechar);
+		
+		txtAno.setText(livro.getAno()+"");
+		txtAutor.setText(livro.getAutor());
+		txtCodigo.setText(livro.getCodigo());
+		txtEdicao.setText(livro.getEdicao());
+		txtEditora.setText(livro.getEditora());
+		txtTitulo.setText(livro.getTitulo());
+		textArea.setText(livro.getDescricao());
 	}
 }
