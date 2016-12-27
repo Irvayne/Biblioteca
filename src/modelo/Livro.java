@@ -12,8 +12,7 @@ public class Livro {
 	private String edicao;
 	private String descricao;
 	private List<String> assuntos;
-	
-	
+
 	public Livro(long id, String titulo, String autor, int ano, String codigo, String editora, String edicao,
 			String descricao, List<String> assuntos) {
 		super();
@@ -28,8 +27,7 @@ public class Livro {
 		this.assuntos = assuntos;
 	}
 
-	public Livro(String titulo, String autor, int ano, String codigo, String editora,String edicao,
-			String descricao) {
+	public Livro(String titulo, String autor, int ano, String codigo, String editora, String edicao, String descricao) {
 		super();
 		this.titulo = titulo;
 		this.autor = autor;
@@ -39,7 +37,7 @@ public class Livro {
 		this.edicao = edicao;
 		this.descricao = descricao;
 	}
-	
+
 	public Livro(long id, String titulo, String autor, int ano, String codigo, String editora) {
 		super();
 		this.id = id;
@@ -48,6 +46,11 @@ public class Livro {
 		this.ano = ano;
 		this.codigo = codigo;
 		this.editora = editora;
+	}
+
+	public Livro(String codigo) {
+		super();
+		this.codigo = codigo;
 	}
 
 	public long getId() {
@@ -61,39 +64,39 @@ public class Livro {
 	public String getTitulo() {
 		return titulo;
 	}
-	
+
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-	
+
 	public String getAutor() {
 		return autor;
 	}
-	
+
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	
+
 	public int getAno() {
 		return ano;
 	}
-	
+
 	public void setAno(int ano) {
 		this.ano = ano;
 	}
-	
+
 	public String getEditora() {
 		return editora;
 	}
-	
+
 	public void setEditora(String editora) {
 		this.editora = editora;
 	}
-	
+
 	public List<String> getAssuntos() {
 		return assuntos;
 	}
-	
+
 	public void setAssuntos(List<String> assuntos) {
 		this.assuntos = assuntos;
 	}
@@ -105,6 +108,7 @@ public class Livro {
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+
 	public String getEdicao() {
 		return edicao;
 	}

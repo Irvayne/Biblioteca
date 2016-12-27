@@ -126,18 +126,28 @@ public class LivroDAO {
 	public static ArrayList<Livro> listarLivrosEmprestados() throws SQLException{
 		createTable();
 		ArrayList<Livro> livros = new ArrayList<Livro>();
+		Livro l = null;
 		Statement st;
 		try{
 			st = (Statement) Conexao.getConnection().createStatement();
 			String cmd = "select * from emprestimo";
 			ResultSet rs = st.executeQuery(cmd);
 			while(rs.next()){
-				System.out.println(rs.getString("codigo"));
+				l = new Livro(rs.getString("codigo"));
+				livros.add(l);
 			}
 		}catch(Exception e){
 			
 		}
-		return livros;
+		
+		ArrayList<Livro> livrosCompletos = new ArrayList<Livro>();
+		
+		for (Livro livro : livros ){
+			
+			livrosCompletos.add(pesquisarLivroEmprestado(livro.getCodigo()));
+		}
+		
+		return livrosCompletos;
 	}
 	
 	public static boolean deletarLivro(String codigo) throws ObjetoInexistente, SQLException{
